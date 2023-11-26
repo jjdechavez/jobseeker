@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { AuthHandler, GithubAdapter } from "sst/node/auth";
+import { AuthHandler, GithubAdapter, Session } from "sst/node/auth";
 
 declare module "sst/node/auth" {
   export interface SessionTypes {
@@ -24,11 +24,14 @@ export const handler = AuthHandler({
             Authorization: `Bearer ${tokenset.access_token}`,
           }
         });
-        const githubUser = await response.json() as { email: string; avatar_url: string; };
-        return {
-          statusCode: 200,
-          body: JSON.stringify(githubUser, null, 4)
-        }
+        const githubUser = await response.json() as { id: number, email: string; avatar_url: string; };
+        return Session.parameter({
+          redirect: "http://localhost:5173",
+          type: "user",
+          properties: {
+            userID: githubUser.id.toString(),
+          }
+        })
       }
     })
   }
