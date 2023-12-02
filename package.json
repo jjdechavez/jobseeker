@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
-    "@types/better-sqlite3": "^7.6.8",
     "aws-cdk-lib": "2.110.1",
     "constructs": "10.3.0",
     "sst": "^2.36.6",
@@ -23,10 +22,5 @@
   },
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "better-sqlite3": "^9.2.0",
-    "dotenv": "^16.3.1",
-    "kysely": "^0.26.3"
-  }
+  ]
 }
