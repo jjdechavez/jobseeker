@@ -1,19 +1,20 @@
-import 'dotenv/config'
 import { AuthHandler, GithubAdapter, Session } from "sst/node/auth";
+import { Config } from "sst/node/config";
+import { findUserByEmail, createUser } from "@jobseeker/core/entities/users";
 
 declare module "sst/node/auth" {
   export interface SessionTypes {
     user: {
       userID: string;
-    }
+    };
   }
 }
 
 export const handler = AuthHandler({
   providers: {
     github: GithubAdapter({
-      clientID: process.env.GITHUB_CLIENT_ID ?? '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
+      clientID: Config.GITHUB_CLIENT_ID,
+      clientSecret: Config.GITHUB_CLIENT_SECRET,
       scope: "read:user user:email",
       onSuccess: async (tokenset) => {
         // We cannot use tokenset.claims() it's only available for OIDC providers like google;
@@ -22,17 +23,42 @@ export const handler = AuthHandler({
         const response = await fetch("https://api.github.com/user", {
           headers: {
             Authorization: `Bearer ${tokenset.access_token}`,
-          }
+          },
         });
-        const githubUser = await response.json() as { id: number, email: string; avatar_url: string; };
+        const githubUser = (await response.json()) as {
+          id: number;
+          email: string;
+          avatar_url: string;
+          name: string;
+        };
+
+        const userExist = await findUserByEmail(githubUser.email);
+
+        if (!userExist) {
+          const userId = await createUser({
+            name: githubUser.name,
+            email: githubUser.email,
+            avatarUrl: githubUser.avatar_url,
+            providerId: githubUser.id,
+          });
+
+          return Session.parameter({
+            redirect: "http://localhost:5173",
+            type: "user",
+            properties: {
+              userID: userId.toString(),
+            },
+          });
+        }
+
         return Session.parameter({
           redirect: "http://localhost:5173",
           type: "user",
           properties: {
-            userID: githubUser.id.toString(),
-          }
-        })
-      }
-    })
-  }
+            userID: userExist.id.toString(),
+          },
+        });
+      },
+    }),
+  },
 });
