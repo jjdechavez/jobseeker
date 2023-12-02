@@ -7,11 +7,14 @@
     "typecheck": "tsc -noEmit"
   },
   "devDependencies": {
-    "vitest": "^0.34.6",
+    "@types/better-sqlite3": "^7.6.8",
     "@types/node": "^20.10.0",
-    "sst": "^2.36.6"
+    "sst": "^2.36.6",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
+    "better-sqlite3": "^9.2.0",
+    "kysely": "^0.26.3",
     "zod": "^3.22.4"
   }
 }

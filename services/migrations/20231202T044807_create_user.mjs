@@ -11,6 +11,7 @@ export async function up(db) {
     .addColumn('name', 'text', (col) => col.notNull())
     .addColumn('email', 'text', (col) => col.unique().notNull())
     .addColumn('avatar_url', 'text', (col) => col.notNull())
+    .addColumn('provider_id', 'integer', (col) => col.notNull())
     .addColumn('created_at', 'text', (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
 }
