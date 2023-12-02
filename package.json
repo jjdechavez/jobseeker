@@ -9,10 +9,13 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "make:migration": "node ./scripts/createKyselyMigrationFile.cjs",
+    "db:local:migrate": "node ./scripts/kyeslyMigarteToLatest.mjs"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
+    "@types/better-sqlite3": "^7.6.8",
     "aws-cdk-lib": "2.110.1",
     "constructs": "10.3.0",
     "sst": "^2.36.6",
@@ -22,6 +25,8 @@
     "packages/*"
   ],
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "better-sqlite3": "^9.2.0",
+    "dotenv": "^16.3.1",
+    "kysely": "^0.26.3"
   }
 }
