@@ -4,13 +4,20 @@ export function ApiStack({ stack }: StackContext) {
   const secrets = Config.Secret.create(
     stack,
     "DATABASE_URL",
-    "DATABASE_AUTH_TOKEN"
+    "DATABASE_AUTH_TOKEN",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET"
   );
 
   const api = new Api(stack, "api", {
     defaults: {
       function: {
-        bind: [secrets.DATABASE_URL, secrets.DATABASE_AUTH_TOKEN],
+        bind: [
+          secrets.DATABASE_URL,
+          secrets.DATABASE_AUTH_TOKEN,
+          secrets.GITHUB_CLIENT_ID,
+          secrets.GITHUB_CLIENT_SECRET,
+        ],
       },
     },
     routes: {
