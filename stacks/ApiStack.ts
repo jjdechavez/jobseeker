@@ -1,4 +1,4 @@
-import { StackContext, Api, Auth, Config } from "sst/constructs";
+import { StackContext, Api, Config } from "sst/constructs";
 
 export function ApiStack({ stack }: StackContext) {
   const secrets = Config.Secret.create(
@@ -28,20 +28,15 @@ export function ApiStack({ stack }: StackContext) {
           description: "This is the migrator function",
         },
       },
+      "GET /session": {
+        function: {
+          handler: "packages/functions/src/session.handler",
+          description: "Get authenticated by session",
+        },
+      },
       // "GET /todo": "packages/functions/src/todo.list",
       // "POST /todo": "packages/functions/src/todo.create",
     },
-  });
-
-  const auth = new Auth(stack, "auth", {
-    authenticator: {
-      handler: "packages/functions/src/auth.handler",
-    },
-  });
-
-  auth.attach(stack, {
-    api,
-    prefix: "/auth",
   });
 
   stack.addOutputs({
