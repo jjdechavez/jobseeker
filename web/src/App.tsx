@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [session, setSession] = useState<string>();
+  const [session, setSession] = useState<{
+    id: number;
+    name: string;
+    email: string;
+    avatarUrl: string;
+  }>();
+  const [loading, setLoading] = useState(true);
 
   const getSession = async () => {
-    const token = localStorage.getItem("session")
+    const token = localStorage.getItem("session");
     if (token) {
-      setSession(token);
+      const user = await getUserInfo(token);
+      if (user) setSession(user);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -27,10 +36,30 @@ function App() {
     }
   }, []);
 
+  const getUserInfo = async (session: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/session`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${session}`,
+          },
+        }
+      );
+
+      return response.json();
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   const signOut = () => {
     localStorage.removeItem("session");
     setSession(undefined);
   };
+
+  if (loading) return <div className="container">Loading...</div>;
 
   return (
     <>
@@ -42,21 +71,33 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>SST Auth Github</h1>
       <div className="card">
         {session ? (
-          <div>
-            <p>Yeah! You are signed in.</p>
-            <button type="button" onClick={signOut}>Sign out</button>
+          <div className="profile">
+            <p>Welcome {session.name}</p>
+            <img
+              src={session.avatarUrl}
+              style={{ borderRadius: "50%" }}
+              width={100}
+              height={100}
+              alt=""
+            />
+            <p>{session.email}</p>
+            <button type="button" onClick={signOut}>
+              Sign out
+            </button>
           </div>
         ) : (
-          <a href={`${import.meta.env.VITE_APP_API_URL}/auth/github/authorize`} rel="noreferrer">
+          <a
+            href={`${import.meta.env.VITE_APP_API_URL}/auth/github/authorize`}
+            rel="noreferrer"
+          >
             <button>Sign in with Github</button>
           </a>
         )}
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -16,6 +16,20 @@ export const findUserByEmail = z
     return user;
   });
 
+const findUserByIdSchema = z
+  .union([z.string(), z.number()])
+  .pipe(z.coerce.number());
+
+export const findUserById = z
+  .function()
+  .args(findUserByIdSchema)
+  .implement(
+    async (userId) =>
+      await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, userId),
+      })
+  );
+
 const insertUserSchema = createInsertSchema(users);
 
 export const createUser = z

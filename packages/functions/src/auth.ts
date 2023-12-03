@@ -1,4 +1,5 @@
 import { AuthHandler, GithubAdapter, Session } from "sst/node/auth";
+import { StaticSite } from "sst/node/site";
 import { Config } from "sst/node/config";
 import { findUserByEmail, createUser } from "@jobseeker/core/entities/users";
 
@@ -33,6 +34,9 @@ export const handler = AuthHandler({
         };
 
         const userExist = await findUserByEmail(githubUser.email);
+        const redirect = process.env.IS_LOCAL
+          ? "http://localhost:5173"
+          : StaticSite.Site.url;
 
         if (!userExist) {
           const userId = await createUser({
@@ -43,7 +47,7 @@ export const handler = AuthHandler({
           });
 
           return Session.parameter({
-            redirect: "http://localhost:5173",
+            redirect,
             type: "user",
             properties: {
               userID: userId.toString(),
@@ -52,7 +56,7 @@ export const handler = AuthHandler({
         }
 
         return Session.parameter({
-          redirect: "http://localhost:5173",
+          redirect,
           type: "user",
           properties: {
             userID: userExist.id.toString(),
