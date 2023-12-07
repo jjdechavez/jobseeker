@@ -1,4 +1,16 @@
 import { cn } from "@/lib/utils";
+import { NavLink } from "react-router-dom";
+
+const navLinks = [
+  {
+    path: "/",
+    name: "Home",
+  },
+  {
+    path: "/contacts/1",
+    name: "Settings",
+  },
+];
 
 export function MainNav({
   className,
@@ -9,24 +21,20 @@ export function MainNav({
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
-      <a
-        href="/examples/dashboard"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Home
-      </a>
-      <a
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Customers
-      </a>
-      <a
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Settings
-      </a>
+      {navLinks.map((nav) => (
+        <NavLink
+          key={nav.name}
+          to={nav.path}
+          className={({ isActive }) =>
+            cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              !isActive && "text-muted-foreground"
+            )
+          }
+        >
+          {nav.name}
+        </NavLink>
+      ))}
     </nav>
   );
 }
