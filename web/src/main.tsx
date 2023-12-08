@@ -5,6 +5,7 @@ import "./index.css";
 import RootPage from "./routes/root.tsx";
 import ErrorPage from "./routes/error-page.tsx";
 import Contact from "./routes/contact.tsx";
+import SigninPage from "./routes/signin.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/signin",
+    element: <SigninPage />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
