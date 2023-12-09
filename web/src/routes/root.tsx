@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -10,50 +9,19 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { MainNav } from "@/components/main-nav";
 import { UserNav } from "@/components/user-nav";
-import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function RootPage() {
-  const { user } = useLoaderData();
-
-  const signOut = () => {
-    localStorage.removeItem("session");
-    return redirect("/");
-  };
-
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <DashboardPage />
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Project</CardTitle>
-          <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="profile">
-            <p>Welcome {user.name}</p>
-            <img
-              src={user.avatarUrl}
-              style={{ borderRadius: "50%" }}
-              width={100}
-              height={100}
-              alt=""
-            />
-            <p>{user.email}</p>
-            <button type="button" onClick={signOut}>
-              Sign out
-            </button>
-          </div>
-        </CardContent>
-      </Card>
     </ThemeProvider>
   );
 }
 
 export function DashboardPage() {
   return (
-    <div className="hidden flex-col md:flex">
+    <div className="flex-col md:flex">
       <div className="border-b">
         <div className="flex h-16 items-center px-4">
           <MainNav className="mx-6" />

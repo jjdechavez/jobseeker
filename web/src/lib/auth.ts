@@ -1,3 +1,9 @@
+import { UserSelect } from "../../../packages/core/src/drizzle/sql/schema";
+
+export interface GetSession {
+  session: UserSelect;
+}
+
 export const getSession = async (session: string) => {
   try {
     const response = await fetch(
@@ -10,8 +16,8 @@ export const getSession = async (session: string) => {
       }
     );
 
-    return response.json();
+    return response.json() as Promise<UserSelect | undefined>;
   } catch (error) {
-    alert(error);
+    console.error(error);
   }
 };

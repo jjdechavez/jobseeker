@@ -20,8 +20,8 @@ const router = createBrowserRouter([
     loader: async () => {
       const token = localStorage.getItem("session");
       if (token) {
-        const user = await getSession(token);
-        return { user };
+        const session = await getSession(token);
+        return { session };
       }
 
       return redirect("/signin");
