@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -11,65 +10,15 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { MainNav } from "@/components/main-nav";
 import { UserNav } from "@/components/user-nav";
-import { Outlet } from "react-router-dom";
+import { Outlet, redirect, useLoaderData } from "react-router-dom";
 
 function RootPage() {
-  const [session, setSession] = useState<{
-    id: number;
-    name: string;
-    email: string;
-    avatarUrl: string;
-  }>();
-  const [loading, setLoading] = useState(false);
-
-  const getSession = async () => {
-    const token = localStorage.getItem("session");
-    if (token) {
-      const user = await getUserInfo(token);
-      if (user) setSession(user);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getSession();
-  }, []);
-
-  useEffect(() => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    const token = params.get("token");
-    if (token) {
-      localStorage.setItem("session", token);
-      window.location.replace(window.location.origin);
-    }
-  }, []);
-
-  const getUserInfo = async (session: string) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/session`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${session}`,
-          },
-        }
-      );
-
-      return response.json();
-    } catch (error) {
-      alert(error);
-    }
-  };
+  const { user } = useLoaderData();
 
   const signOut = () => {
     localStorage.removeItem("session");
-    setSession(undefined);
+    return redirect("/");
   };
-
-  if (loading) return <div className="container">Loading...</div>;
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -82,33 +31,20 @@ function RootPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {session ? (
-            <div className="profile">
-              <p>Welcome {session.name}</p>
-              <img
-                src={session.avatarUrl}
-                style={{ borderRadius: "50%" }}
-                width={100}
-                height={100}
-                alt=""
-              />
-              <p>{session.email}</p>
-              <button type="button" onClick={signOut}>
-                Sign out
-              </button>
-            </div>
-          ) : (
-            <Button asChild>
-              <a
-                href={`${
-                  import.meta.env.VITE_APP_API_URL
-                }/auth/github/authorize`}
-                rel="noreferrer"
-              >
-                <button>Sign in with Github</button>
-              </a>
-            </Button>
-          )}
+          <div className="profile">
+            <p>Welcome {user.name}</p>
+            <img
+              src={user.avatarUrl}
+              style={{ borderRadius: "50%" }}
+              width={100}
+              height={100}
+              alt=""
+            />
+            <p>{user.email}</p>
+            <button type="button" onClick={signOut}>
+              Sign out
+            </button>
+          </div>
         </CardContent>
       </Card>
     </ThemeProvider>

@@ -35,8 +35,8 @@ export const handler = AuthHandler({
 
         const userExist = await findUserByEmail(githubUser.email);
         const redirect = process.env.IS_LOCAL
-          ? "http://localhost:5173"
-          : StaticSite.Site.url;
+          ? "http://localhost:5173/oauth/github"
+          : `${StaticSite.Site.url}/oauth/github`;
 
         if (!userExist) {
           const userId = await createUser({
