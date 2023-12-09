@@ -32,7 +32,8 @@ const router = createBrowserRouter([
         element: <Contact />,
       },
     ],
-  }, {
+  },
+  {
     path: "/oauth/github",
     loader: () => {
       const search = window.location.search;
@@ -43,12 +44,19 @@ const router = createBrowserRouter([
       }
 
       return redirect("/");
-    }
+    },
   },
   {
     path: "/signin",
     element: <SigninPage />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/signout",
+    action: () => {
+      localStorage.removeItem("session");
+      return redirect("/signin");
+    },
   },
 ]);
 
