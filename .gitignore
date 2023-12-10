@@ -16,4 +16,4 @@ node_modules
 .env*.local
 
 # local db
-jobseeker_dev.db
+jobseeker*.db

@@ -1,19 +1,29 @@
 import { createClient } from "@libsql/client/web";
-import { drizzle } from "drizzle-orm/libsql";
-import { migrate as mig } from "drizzle-orm/libsql/migrator";
-import { join } from "path";
+import { createClient as createLocalClient } from "@libsql/client";
+import { drizzle as DrizzleLibSQL } from "drizzle-orm/libsql";
+import { migrate as migrateLibSQL } from "drizzle-orm/libsql/migrator";
 import { Config } from "sst/node/config";
+import { join } from "path";
 import * as schema from "./schema";
 
-const client = createClient({ url: Config.DATABASE_URL, authToken: Config.DATABASE_AUTH_TOKEN });
+const stage = Config.STAGE;
+const isProduction = stage === "production";
 
-export const db = drizzle(client, {
-  schema,
-});
+const client = isProduction
+  ? createClient({
+      url: Config.DATABASE_URL,
+      authToken: Config.DATABASE_AUTH_TOKEN,
+    })
+  : createLocalClient({ url: "file:./jobseeker.db" });
+
+export const db = DrizzleLibSQL(client, { schema });
 
 export const migrate = async () => {
-  const stage = Config.STAGE;
-  const folder = stage !== "production" ? "packages/core/src/drizzle/migrations" : "drizzle/migrations";
-  return mig(db, { migrationsFolder: join(process.cwd(), folder) });
-};
+  const folder = isProduction
+    ? "drizzle/migrations"
+    : "packages/core/src/drizzle/migrations";
 
+  return migrateLibSQL(db, {
+    migrationsFolder: join(process.cwd(), folder),
+  });
+};

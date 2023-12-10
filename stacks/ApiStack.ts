@@ -18,6 +18,9 @@ export function ApiStack({ stack }: StackContext) {
           secrets.GITHUB_CLIENT_ID,
           secrets.GITHUB_CLIENT_SECRET,
         ],
+        nodejs: {
+          install: ["@libsql/linux-x64-gnu"],
+        },
       },
     },
     routes: {
