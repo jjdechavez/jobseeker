@@ -9,9 +9,7 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "typecheck": "tsc --noEmit",
-    "make:migration": "node ./scripts/createKyselyMigrationFile.cjs",
-    "db:local:migrate": "node ./scripts/kyeslyMigarteToLatest.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
