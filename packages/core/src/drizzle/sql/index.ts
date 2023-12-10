@@ -2,19 +2,18 @@ import { createClient } from "@libsql/client/web";
 import { createClient as createLocalClient } from "@libsql/client";
 import { drizzle as DrizzleLibSQL } from "drizzle-orm/libsql";
 import { migrate as migrateLibSQL } from "drizzle-orm/libsql/migrator";
-import { Config } from "sst/node/config";
 import { join } from "path";
 import * as schema from "./schema";
+import server from "../../env/server";
 
-const stage = Config.STAGE;
-const isProduction = stage === "production";
+const { isProduction, DATABASE_URL, DATABASE_AUTH_TOKEN } = server;
 
 const client = isProduction
   ? createClient({
-      url: Config.DATABASE_URL,
-      authToken: Config.DATABASE_AUTH_TOKEN,
+      url: DATABASE_URL,
+      authToken: DATABASE_AUTH_TOKEN,
     })
-  : createLocalClient({ url: "file:./jobseeker.db" });
+  : createLocalClient({ url: DATABASE_URL });
 
 export const db = DrizzleLibSQL(client, { schema });
 
