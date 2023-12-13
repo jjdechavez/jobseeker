@@ -7,7 +7,7 @@ const navLinks = [
     name: "Home",
   },
   {
-    path: "/contacts/1",
+    path: "/settings/countries",
     name: "Settings",
   },
 ];

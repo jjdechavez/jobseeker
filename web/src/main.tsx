@@ -10,6 +10,9 @@ import RootPage from "./routes/root.tsx";
 import ErrorPage from "./routes/error-page.tsx";
 import Contact from "./routes/contact.tsx";
 import SigninPage from "./routes/signin.tsx";
+import SettingsLayout from "./routes/settings/layout.tsx";
+import SettingsCountriesPage from "./routes/settings/countries.tsx";
+
 import { getSession } from "./lib/auth.ts";
 
 const router = createBrowserRouter([
@@ -27,6 +30,17 @@ const router = createBrowserRouter([
       return redirect("/signin");
     },
     children: [
+      {
+        path: "settings",
+        element: <SettingsLayout />,
+        children: [
+          {
+            index: true,
+            path: "countries",
+            element: <SettingsCountriesPage />,
+          },
+        ],
+      },
       {
         path: "contacts/:contactId",
         element: <Contact />,

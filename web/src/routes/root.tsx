@@ -4,6 +4,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { MainNav } from "@/components/main-nav";
 import { UserNav } from "@/components/user-nav";
 import { Outlet } from "react-router-dom";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
@@ -28,28 +29,44 @@ export function Dashboard() {
         </div>
       </div>
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <DashboardHeader>
-          <DashboardHeaderTitle>Dashboard</DashboardHeaderTitle>
-        </DashboardHeader>
-
-        <DashboardContent>
-          <Outlet />
-        </DashboardContent>
+        <Outlet />
+        {/* <DashboardHeader> */}
+        {/*   <DashboardHeaderTitle>Dashboard</DashboardHeaderTitle> */}
+        {/* </DashboardHeader> */}
+        {/**/}
+        {/* <DashboardContent> */}
+        {/*   <Outlet /> */}
+        {/* </DashboardContent> */}
       </div>
     </div>
   );
 }
 
-const DashboardHeader = React.forwardRef<
-  HTMLElement,
-  React.HTMLAttributes<HTMLElement>
->(({ className, ...props }, ref) => (
-  <header
-    ref={ref}
-    className={cn("flex items-center justify-between space-y-2", className)}
-    {...props}
-  />
-));
+const dashboardHeaderVariants = cva("", {
+  variants: {
+    variant: {
+      default: "flex items-center justify-between space-y-2",
+      withSubTitle: "space-y-0.5",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+export interface DashboardHeaderProps
+  extends React.ButtonHTMLAttributes<HTMLElement>,
+    VariantProps<typeof dashboardHeaderVariants> {}
+
+const DashboardHeader = React.forwardRef<HTMLElement, DashboardHeaderProps>(
+  ({ className, variant, ...props }, ref) => (
+    <header
+      ref={ref}
+      className={cn(dashboardHeaderVariants({ variant, className }))}
+      {...props}
+    />
+  )
+);
 DashboardHeader.displayName = "DashboardHeader";
 
 const DashboardHeaderTitle = React.forwardRef<
@@ -64,14 +81,27 @@ const DashboardHeaderTitle = React.forwardRef<
 ));
 DashboardHeaderTitle.displayName = "DashboardHeaderTitle";
 
+const DashboardHeaderSubTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-muted-foreground", className)} {...props} />
+));
+DashboardHeaderSubTitle.displayName = "DashboardHeaderSubTitle";
+
 const DashboardContent = React.forwardRef<
   HTMLElement,
   React.HTMLAttributes<HTMLElement>
 >(({ className, children, ...props }, ref) => (
-  <main ref={ref} className={cn("space-y-4", className)} {...props}>
+  <main ref={ref} className={cn("", className)} {...props}>
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">{children}</div>
   </main>
 ));
 DashboardContent.displayName = "DashboardContent";
 
-export { DashboardHeader, DashboardHeaderTitle, DashboardContent };
+export {
+  DashboardHeader,
+  DashboardHeaderTitle,
+  DashboardHeaderSubTitle,
+  DashboardContent,
+};
