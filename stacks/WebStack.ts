@@ -5,7 +5,7 @@ export function WebStack({ stack }: StackContext) {
   const { api } = use(ApiStack);
 
   const site = new StaticSite(stack, "Site", {
-    path: "web",
+    path: "packages/web",
     buildCommand: "npm run build",
     buildOutput: "dist",
     environment: {

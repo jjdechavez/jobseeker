@@ -11,7 +11,9 @@ import ErrorPage from "./routes/error-page.tsx";
 import Contact from "./routes/contact.tsx";
 import SigninPage from "./routes/signin.tsx";
 import SettingsLayout from "./routes/settings/layout.tsx";
-import SettingsCountriesPage from "./routes/settings/countries.tsx";
+import SettingsCountriesPage, {
+  action as settingCountriesAction,
+} from "./routes/settings/countries.tsx";
 
 import { getSession } from "./lib/auth.ts";
 
@@ -23,8 +25,17 @@ const router = createBrowserRouter([
     loader: async () => {
       const token = localStorage.getItem("session");
       if (token) {
-        const session = await getSession(token);
-        return { session };
+        // const session = await getSession(token);
+        const defaultSession = {
+          id: 1,
+          createdAt: "2023-12-10T07:53:56.000Z",
+          updatedAt: null,
+          name: "John Jerald E. De Chavez",
+          email: "dechavezjohnjerald029@gmail.com",
+          avatarUrl: "https://avatars.githubusercontent.com/u/46374990?v=4",
+          providerId: 46374990,
+        };
+        return { session: defaultSession };
       }
 
       return redirect("/signin");
@@ -38,6 +49,7 @@ const router = createBrowserRouter([
             index: true,
             path: "countries",
             element: <SettingsCountriesPage />,
+            action: settingCountriesAction,
           },
         ],
       },
