@@ -37,7 +37,12 @@ export function ApiStack({ stack }: StackContext) {
           description: "Get authenticated by session",
         },
       },
-      // "GET /todo": "packages/functions/src/todo.list",
+      "POST /countries": {
+        function: {
+          handler: "packages/functions/src/countries.create",
+          description: "Create country",
+        },
+      },
       // "POST /todo": "packages/functions/src/todo.create",
     },
   });
