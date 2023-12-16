@@ -43,7 +43,18 @@ export function ApiStack({ stack }: StackContext) {
           description: "Create country",
         },
       },
-      // "POST /todo": "packages/functions/src/todo.create",
+      "GET /countries/{id}": {
+        function: {
+          handler: "packages/functions/src/countries.findById",
+          description: "Get country by id",
+        },
+      },
+      "PUT /countries/{id}": {
+        function: {
+          handler: "packages/functions/src/countries.update",
+          description: "Update country by id",
+        },
+      },
     },
   });
 

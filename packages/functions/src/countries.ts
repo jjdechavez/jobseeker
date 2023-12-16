@@ -1,9 +1,11 @@
-import { useJsonBody } from "sst/node/api";
+import { useJsonBody, usePathParam } from "sst/node/api";
 import {
+  findCountryById,
   insertCountry,
   insertCountrySchema,
+  updateCountry,
 } from "@jobseeker/core/entities/countries";
-import { BadRequestResponse, withApiAuth } from "./api";
+import { BadRequestResponse, NotFoundResponse, withApiAuth } from "./api";
 
 export const create = withApiAuth(async () => {
   const body = useJsonBody();
@@ -21,5 +23,40 @@ export const create = withApiAuth(async () => {
   return {
     statusCode: 201,
     body: JSON.stringify({ id: countryId }),
+  };
+});
+
+export const findById = withApiAuth(async () => {
+  const countryId = usePathParam("id");
+  if (!countryId) {
+    throw new BadRequestResponse("Missing countryId");
+  }
+
+  const country = await findCountryById(countryId);
+  if (!country) {
+    throw new NotFoundResponse(`Country not found with an id of ${countryId}`);
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ data: country }),
+  };
+});
+
+export const update = withApiAuth(async () => {
+  const countryId = usePathParam("id");
+  if (!countryId) {
+    throw new BadRequestResponse("Missing countryId");
+  }
+
+  const body = useJsonBody();
+  if (!body) {
+    throw new BadRequestResponse("Missing body");
+  }
+
+  await updateCountry(countryId, body);
+
+  return {
+    statusCode: 204,
   };
 });

@@ -14,6 +14,10 @@ import SettingsLayout from "./routes/settings/layout.tsx";
 import SettingsCountriesPage, {
   action as settingCountriesAction,
 } from "./routes/settings/countries.tsx";
+import SettingsCountryEditPage, {
+  loader as settingCountryLoader,
+  action as settingCountryEditAction,
+} from "./routes/settings/country-edit.tsx";
 
 import { getSession } from "./lib/auth.ts";
 
@@ -50,6 +54,12 @@ const router = createBrowserRouter([
             path: "countries",
             element: <SettingsCountriesPage />,
             action: settingCountriesAction,
+          },
+          {
+            path: "countries/:countryId/edit",
+            element: <SettingsCountryEditPage />,
+            loader: settingCountryLoader,
+            action: settingCountryEditAction,
           },
         ],
       },

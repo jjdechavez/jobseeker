@@ -9,7 +9,8 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "jobseeker/core/*": ["../core/src/*"]
     },
 
     /* Bundler mode */

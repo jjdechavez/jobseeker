@@ -24,6 +24,15 @@ export class BadRequestResponse extends Response {
   }
 }
 
+export class NotFoundResponse extends Response {
+  constructor(message: string) {
+    super({
+      statusCode: 404,
+      body: message,
+    });
+  }
+}
+
 export const withApiAuth = (
   cb: (
     evt: APIGatewayProxyEventV2,
