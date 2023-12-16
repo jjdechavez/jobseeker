@@ -13,11 +13,11 @@ import SigninPage from "./routes/signin.tsx";
 import SettingsLayout from "./routes/settings/layout.tsx";
 import SettingsCountriesPage, {
   action as settingCountriesAction,
-} from "./routes/settings/countries.tsx";
+} from "./routes/settings/countries/countries-page.tsx";
 import SettingsCountryEditPage, {
   loader as settingCountryLoader,
   action as settingCountryEditAction,
-} from "./routes/settings/country-edit.tsx";
+} from "./routes/settings/countries/country-edit.tsx";
 
 import { getSession } from "./lib/auth.ts";
 

@@ -5,7 +5,7 @@ import {
   LoaderFunctionArgs,
 } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
-import { CountryForm } from "./countries";
+import { CountryForm } from "./country-form";
 import { findCountryById, updateCountry } from "@/api";
 
 export async function action({ request, params }: ActionFunctionArgs) {

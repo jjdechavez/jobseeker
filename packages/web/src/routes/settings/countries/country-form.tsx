@@ -1,48 +1,7 @@
 import * as Form from "@radix-ui/react-form";
-import {
-  ActionFunctionArgs,
-  Fetcher,
-  Form as RRDForm,
-  redirect,
-} from "react-router-dom";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { Fetcher, Form as RRDForm } from "react-router-dom";
+import { RadixInput } from "@/components/radix-form-input";
 import { Button } from "@/components/ui/button";
-import { insertCountry } from "@/api";
-
-export async function action({ request }: ActionFunctionArgs) {
-  switch (request.method) {
-    case "POST": {
-      const formData = await request.formData();
-      const values = {
-        code: formData.get("code") as string,
-        name: formData.get("name") as string,
-      };
-      const createResult = await insertCountry(values);
-      if (!createResult.success) {
-        throw new Error(createResult.error.message);
-      }
-
-      return redirect(`settings/countries/${createResult.data}`);
-    }
-  }
-}
-
-export default function SettingsCountriesPage() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Profile</h3>
-        <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
-        </p>
-      </div>
-      <Separator />
-
-      <CountryForm />
-    </div>
-  );
-}
 
 interface BaseFormProps {
   formMethod: Fetcher["formMethod"];
@@ -84,7 +43,7 @@ export function CountryForm({
             </Form.Message>
           </div>
           <Form.Control asChild>
-            <Input
+            <RadixInput
               type="text"
               required
               maxLength={3}
@@ -106,7 +65,7 @@ export function CountryForm({
             </Form.Message>
           </div>
           <Form.Control asChild>
-            <Input type="text" required defaultValue={name ?? ""} />
+            <RadixInput type="text" required defaultValue={name ?? ""} />
           </Form.Control>
         </Form.Field>
 
