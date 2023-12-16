@@ -37,6 +37,12 @@ export function ApiStack({ stack }: StackContext) {
           description: "Get authenticated by session",
         },
       },
+      "GET /countries": {
+        function: {
+          handler: "packages/functions/src/countries.getAll",
+          description: "Find countries",
+        },
+      },
       "POST /countries": {
         function: {
           handler: "packages/functions/src/countries.create",

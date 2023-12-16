@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { db } from "../drizzle/sql";
 import { countries } from "../drizzle/sql/schema";
-import { eq } from "drizzle-orm";
+import { eq, like, or } from "drizzle-orm";
 
 export const insertCountrySchema = createInsertSchema(countries, {
   code: z
@@ -58,4 +58,24 @@ export const updateCountry = z
       .update(countries)
       .set({ ...updateWith, updatedAt: new Date() })
       .where(eq(countries.id, countryId))
+  );
+
+const findCountriesSchema = z.object({
+  s: z.string().optional().default(""),
+});
+
+export const findCountries = z
+  .function()
+  .args(findCountriesSchema)
+  .implement(async (criteria) =>
+    db
+      .select({
+        id: countries.id,
+        code: countries.code,
+        name: countries.name,
+      })
+      .from(countries)
+      .where(
+        or(like(countries.code, criteria.s), like(countries.name, criteria.s))
+      )
   );

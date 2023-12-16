@@ -1,5 +1,6 @@
-import { useJsonBody, usePathParam } from "sst/node/api";
+import { useJsonBody, usePathParam, useQueryParam } from "sst/node/api";
 import {
+  findCountries,
   findCountryById,
   insertCountry,
   insertCountrySchema,
@@ -58,5 +59,16 @@ export const update = withApiAuth(async () => {
 
   return {
     statusCode: 204,
+  };
+});
+
+export const getAll = withApiAuth(async () => {
+  const query = useQueryParam("s");
+
+  const countries = await findCountries({ s: query });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ data: countries }),
   };
 });
