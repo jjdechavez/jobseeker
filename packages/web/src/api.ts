@@ -49,3 +49,27 @@ export const updateCountry = async (
     .put()
     .json();
 };
+
+export const getCountries = async (search?: string) => {
+  const schema = z.object({
+    data: z.array(
+      z.object({
+        id: z.number(),
+        code: z.string(),
+        name: z.string(),
+      })
+    ),
+  });
+
+  const countriesUrl = new URL("/countries", externalApi._url);
+  if (search) {
+    countriesUrl.searchParams.set("s", search);
+  }
+
+  const countries = await externalApi
+    .url(countriesUrl.href, true)
+    .get()
+    .json(schema.safeParse);
+
+  return countries;
+};

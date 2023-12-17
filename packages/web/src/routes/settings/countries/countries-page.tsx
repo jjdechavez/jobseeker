@@ -2,15 +2,17 @@ import * as Form from "@radix-ui/react-form";
 import {
   ActionFunctionArgs,
   Fetcher,
+  LoaderFunctionArgs,
   Form as RRDForm,
   redirect,
+  useLoaderData,
 } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { insertCountry } from "@/api";
+import { getCountries, insertCountry } from "@/api";
 import { DataTable } from "./data-table";
-import { Payment, columns } from "./columns";
+import { columns } from "./columns";
 
 export async function action({ request }: ActionFunctionArgs) {
   switch (request.method) {
@@ -30,15 +32,28 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const s = url.searchParams.get("s") ?? undefined;
+
+  const countries = await getCountries(s);
+  return countries;
+}
+
 export default function SettingsCountriesPage() {
-  const data = [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ] as Payment[];
+  const countries = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
+  let views = <div>Loading...</div>;
+  if (!countries.success) {
+    views = (
+      <div>
+        After fetching countries, parse has been failed:{" "}
+        {countries.error.message}
+      </div>
+    );
+  } else if (countries.success) {
+    views = <DataTable columns={columns} data={countries.data.data} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -50,7 +65,7 @@ export default function SettingsCountriesPage() {
       </div>
       <Separator />
 
-      <DataTable columns={columns} data={data} />
+      {views}
     </div>
   );
 }
