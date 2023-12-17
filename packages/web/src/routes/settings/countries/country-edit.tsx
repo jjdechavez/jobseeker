@@ -14,17 +14,26 @@ import { CountryForm } from "./country-form";
 export async function action({ request, params }: ActionFunctionArgs) {
   if (params.countryId) {
     switch (request.method) {
-      case "PUT":
+      case "PUT": {
         const formData = await request.formData();
         const values = {
           code: formData.get("code") as string,
           name: formData.get("name") as string,
         };
-        await updateCountry(params.countryId, values);
 
-        flash.set("success", "Country changes were successfully saved!");
-        return redirect(`/settings/countries`);
-
+        return updateCountry(params.countryId, values)
+          .then(() => {
+            flash.set("success", "Country changes were successfully saved!");
+            return redirect(`/settings/countries`);
+          })
+          .catch((error: unknown) => {
+            if (error instanceof Error) {
+              throw new Error(error.message);
+            } else {
+              throw new Error("unexpected exception");
+            }
+          });
+      }
       default:
         return null;
     }
