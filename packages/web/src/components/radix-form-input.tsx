@@ -4,7 +4,9 @@ import { cn } from "@/lib/utils";
 import * as Form from "@radix-ui/react-form";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+    asChild?: boolean;
+  }
 
 const RadixInput = React.forwardRef<
   Form.FormControlProps & HTMLInputElement,
