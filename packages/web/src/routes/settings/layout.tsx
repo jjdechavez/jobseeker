@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import {
   DashboardHeader,
   DashboardHeaderSubTitle,
@@ -6,6 +6,7 @@ import {
 } from "../root";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const sidebarNavItems = [
   {
@@ -31,6 +32,8 @@ const sidebarNavItems = [
 ];
 
 export default function SettingsLayout() {
+  const navigation = useNavigation();
+
   return (
     <>
       <DashboardHeader variant="withSubTitle">
@@ -46,7 +49,12 @@ export default function SettingsLayout() {
         <aside className="lg:w-1/5">
           <SidebarNav items={sidebarNavItems} />
         </aside>
-        <div className="flex-1 lg:max-w-2xl">
+        <div
+          className={cn(
+            "flex-1 lg:max-w-2xl",
+            navigation.state === "loading" && "opacity-25 transition-opacity"
+          )}
+        >
           <Outlet />
         </div>
       </div>

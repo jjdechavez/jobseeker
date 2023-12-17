@@ -1,5 +1,5 @@
 import * as Form from "@radix-ui/react-form";
-import { Fetcher, Form as RRDForm } from "react-router-dom";
+import { Fetcher, Form as RRDForm, useNavigate } from "react-router-dom";
 import { RadixInput } from "@/components/radix-form-input";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +20,7 @@ export function CountryForm({
   const actionLabel = ["POST", "post"].includes(formMethod)
     ? "Create Country"
     : "Save Country";
+  const navigate = useNavigate();
 
   return (
     <Form.Root className="space-y-8" asChild>
@@ -69,9 +70,14 @@ export function CountryForm({
           </Form.Control>
         </Form.Field>
 
-        <Form.Submit asChild>
-          <Button type="submit">{actionLabel}</Button>
-        </Form.Submit>
+        <div className="inline-flex gap-x-4">
+          <Form.Submit asChild>
+            <Button type="submit">{actionLabel}</Button>
+          </Form.Submit>
+          <Button type="button" variant="link" onClick={() => navigate(-1)}>
+            Cancel
+          </Button>
+        </div>
       </RRDForm>
     </Form.Root>
   );
