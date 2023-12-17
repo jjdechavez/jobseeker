@@ -89,3 +89,10 @@ export const findCountries = z
         .from(countries);
     }
   });
+
+export const deleteCountry = z
+  .function()
+  .args(countryIdSchema)
+  .implement(async (countryId) =>
+    db.delete(countries).where(eq(countries.id, countryId))
+  );

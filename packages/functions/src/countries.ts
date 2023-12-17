@@ -1,5 +1,6 @@
 import { useJsonBody, usePathParam, useQueryParam } from "sst/node/api";
 import {
+  deleteCountry,
   findCountries,
   findCountryById,
   insertCountry,
@@ -70,5 +71,18 @@ export const getAll = withApiAuth(async () => {
   return {
     statusCode: 200,
     body: JSON.stringify({ data: countries }),
+  };
+});
+
+export const destroy = withApiAuth(async () => {
+  const countryId = usePathParam("id");
+  if (!countryId) {
+    throw new BadRequestResponse("Missing countryId");
+  }
+
+  await deleteCountry(countryId);
+
+  return {
+    statusCode: 200,
   };
 });

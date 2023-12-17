@@ -61,6 +61,12 @@ export function ApiStack({ stack }: StackContext) {
           description: "Update country by id",
         },
       },
+      "DELETE /countries/{id}": {
+        function: {
+          handler: "packages/functions/src/countries.destroy",
+          description: "Delete country by id",
+        },
+      },
     },
   });
 
