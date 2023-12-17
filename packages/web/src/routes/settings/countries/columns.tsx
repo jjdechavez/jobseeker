@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -52,12 +53,18 @@ export const columns: ColumnDef<Country>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(country.id.toString())}
+              onClick={() =>
+                navigator.clipboard.writeText(country.id.toString())
+              }
             >
               Copy country ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit country</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`${country.id}/edit`}>
+                Edit country
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

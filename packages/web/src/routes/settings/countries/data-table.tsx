@@ -1,9 +1,10 @@
 import * as React from "react";
-
+import { useNavigation } from "react-router-dom";
 import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -28,6 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +40,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const navigation = useNavigation();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -61,6 +64,10 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
+
+  if (navigation.state === "loading") {
+    return <Skeleton className="w-full h-60" />;
+  }
 
   return (
     <div>
