@@ -18,8 +18,8 @@ export function CountryForm({
   formMethod = "POST",
 }: Partial<CountryFormProps>) {
   const actionLabel = ["POST", "post"].includes(formMethod)
-    ? "Create Country"
-    : "Save Country";
+    ? "Save country"
+    : "Save changes";
   const navigate = useNavigate();
 
   return (
@@ -74,7 +74,11 @@ export function CountryForm({
           <Form.Submit asChild>
             <Button type="submit">{actionLabel}</Button>
           </Form.Submit>
-          <Button type="button" variant="link" onClick={() => navigate(-1)}>
+          <Button
+            type="button"
+            variant="link"
+            onClick={() => navigate("/settings/countries")}
+          >
             Cancel
           </Button>
         </div>

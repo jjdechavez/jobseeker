@@ -10,7 +10,9 @@ const externalApi = wretch(import.meta.env.VITE_APP_API_URL).auth(
 );
 
 export const insertCountry = async (newCountry: CountryInsert) => {
-  const schema = z.number();
+  const schema = z.object({
+    id: z.number(),
+  });
   const country = await externalApi
     .url("/countries")
     .json(newCountry)

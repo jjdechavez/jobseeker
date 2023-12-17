@@ -12,9 +12,11 @@ import Contact from "./routes/contact.tsx";
 import SigninPage from "./routes/signin.tsx";
 import SettingsLayout from "./routes/settings/layout.tsx";
 import SettingsCountriesPage, {
-  action as settingCountriesAction,
   loader as settingCountriesLoader,
 } from "./routes/settings/countries/countries-page.tsx";
+import SettingsCountryNewPage, {
+  action as settingCountriesAction,
+} from "./routes/settings/countries/country-new.tsx";
 import SettingsCountryEditPage, {
   loader as settingCountryLoader,
   action as settingCountryEditAction,
@@ -54,6 +56,12 @@ const router = createBrowserRouter([
             index: true,
             path: "countries",
             element: <SettingsCountriesPage />,
+            loader: settingCountriesLoader,
+            action: settingCountriesAction,
+          },
+          {
+            path: "countries/new",
+            element: <SettingsCountryNewPage />,
             loader: settingCountriesLoader,
             action: settingCountriesAction,
           },
