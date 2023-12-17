@@ -75,7 +75,7 @@ export const columns: ColumnDef<Country>[] = [
                   }
                 }}
               >
-                <button type="submit">Delete Country</button>
+                <button type="submit" className="cursor-default">Delete Country</button>
               </Form>
             </DropdownMenuItem>
           </DropdownMenuContent>
