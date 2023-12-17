@@ -67,15 +67,25 @@ const findCountriesSchema = z.object({
 export const findCountries = z
   .function()
   .args(findCountriesSchema)
-  .implement(async (criteria) =>
-    db
-      .select({
-        id: countries.id,
-        code: countries.code,
-        name: countries.name,
-      })
-      .from(countries)
-      .where(
-        or(like(countries.code, criteria.s), like(countries.name, criteria.s))
-      )
-  );
+  .implement(async (criteria) => {
+    if (criteria.s) {
+      return db
+        .select({
+          id: countries.id,
+          code: countries.code,
+          name: countries.name,
+        })
+        .from(countries)
+        .where(
+          or(like(countries.code, criteria.s), like(countries.name, criteria.s))
+        );
+    } else {
+      return db
+        .select({
+          id: countries.id,
+          code: countries.code,
+          name: countries.name,
+        })
+        .from(countries);
+    }
+  });
