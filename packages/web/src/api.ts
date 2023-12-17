@@ -44,13 +44,7 @@ export const findCountryById = async (countryId: string) => {
 export const updateCountry = async (
   countryId: string,
   updateWith: { code: string; name: string }
-) => {
-  await externalApi
-    .url(`/countries/${countryId}`)
-    .json(updateWith)
-    .put()
-    .json();
-};
+) => externalApi.url(`/countries/${countryId}`).json(updateWith).put();
 
 export const getCountries = async (search?: string) => {
   const schema = z.object({

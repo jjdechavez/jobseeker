@@ -1,8 +1,8 @@
-import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom";
+import { ActionFunctionArgs, redirect } from "react-router-dom";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { insertCountry } from "@/api";
-import { loader } from "./country-edit";
 import { CountryForm } from "./country-form";
+import { flash } from "@/lib/flash";
 
 export async function action({ request }: ActionFunctionArgs) {
   switch (request.method) {
@@ -17,26 +17,13 @@ export async function action({ request }: ActionFunctionArgs) {
         throw new Error(createResult.error.message);
       }
 
+      flash.set("success", "Country has been successfully created!");
       return redirect(`/settings/countries/${createResult.data.id}/edit`);
     }
   }
 }
 
 export default function SettingsCountryNewPage() {
-  const country = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-
-  let views = <div>Loading...</div>;
-  if (!country.success) {
-    views = <div>{country.error.message}</div>;
-  } else if (country.success) {
-    views = (
-      <CountryForm
-        code={country.data.data.code}
-        name={country.data.data.name}
-      />
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div>
@@ -47,7 +34,7 @@ export default function SettingsCountryNewPage() {
       </div>
       <Separator />
 
-      {views}
+      <CountryForm />
     </div>
   );
 }

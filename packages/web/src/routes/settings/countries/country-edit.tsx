@@ -5,8 +5,11 @@ import {
   LoaderFunctionArgs,
 } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
-import { CountryForm } from "./country-form";
+import { Toasted } from "@/components/ui/taosted";
 import { findCountryById, updateCountry } from "@/api";
+import { flash } from "@/lib/flash";
+
+import { CountryForm } from "./country-form";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   if (params.countryId) {
@@ -18,20 +21,35 @@ export async function action({ request, params }: ActionFunctionArgs) {
           name: formData.get("name") as string,
         };
         await updateCountry(params.countryId, values);
-        return redirect(`settings/countries`);
+
+        flash.set("success", "Country changes were successfully saved!");
+        return redirect(`/settings/countries`);
+
       default:
-        break;
+        return null;
     }
   }
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const country = await findCountryById(params.countryId!);
-  return country;
+  const message = flash.get("success");
+
+  return {
+    country,
+    message,
+  };
 }
 
 export default function SettingsCountryEditPage() {
-  const country = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { country, message } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+
+  let toast = null;
+  if (message) {
+    toast = <Toasted description={message} />;
+  }
 
   let views = <div>Loading...</div>;
   if (!country.success) {
@@ -57,6 +75,7 @@ export default function SettingsCountryEditPage() {
       <Separator />
 
       {views}
+      {toast}
     </div>
   );
 }

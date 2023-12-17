@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { MainNav } from "@/components/main-nav";
 import { UserNav } from "@/components/user-nav";
+import { Toaster } from "@/components/ui/toaster";
 import { Outlet } from "react-router-dom";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -12,6 +13,7 @@ export default function RootPage() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Dashboard />
+      <Toaster />
     </ThemeProvider>
   );
 }
@@ -30,13 +32,6 @@ export function Dashboard() {
       </div>
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Outlet />
-        {/* <DashboardHeader> */}
-        {/*   <DashboardHeaderTitle>Dashboard</DashboardHeaderTitle> */}
-        {/* </DashboardHeader> */}
-        {/**/}
-        {/* <DashboardContent> */}
-        {/*   <Outlet /> */}
-        {/* </DashboardContent> */}
       </div>
     </div>
   );

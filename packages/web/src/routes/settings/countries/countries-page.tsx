@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Toasted } from "@/components/ui/taosted";
+import { flash } from "@/lib/flash";
 import { getCountries } from "@/api";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
@@ -14,12 +16,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const s = url.searchParams.get("s") ?? undefined;
 
   const countries = await getCountries(s);
-  return countries;
+  const message = flash.get("success");
+  return { countries, message };
 }
 
 export default function SettingsCountriesPage() {
   const navigate = useNavigate();
-  const countries = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const { countries, message } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+
+  let toast = null
+  if (message) {
+    toast = <Toasted description={message} />
+  }
 
   let views = <div>Loading...</div>;
   if (!countries.success) {
@@ -53,6 +63,7 @@ export default function SettingsCountriesPage() {
       <Separator />
 
       {views}
+      {toast}
     </div>
   );
 }
