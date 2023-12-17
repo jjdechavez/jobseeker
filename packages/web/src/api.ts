@@ -69,3 +69,10 @@ export const getCountries = async (search?: string) => {
 
   return countries;
 };
+
+export const deleteCountry = async (countryId: string) => {
+  return await externalApi
+    .url(`/countries/${countryId}`)
+    .delete()
+    .res(() => true);
+};

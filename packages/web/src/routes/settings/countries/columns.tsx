@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -61,9 +61,22 @@ export const columns: ColumnDef<Country>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`${country.id}/edit`}>
-                Edit country
-              </Link>
+              <Link to={`${country.id}/edit`}>Edit country</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Form
+                method="post"
+                action={`${country.id}/destroy`}
+                onSubmit={(e) => {
+                  if (
+                    !confirm("Please confirm you want to delete this country.")
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                <button type="submit">Delete Country</button>
+              </Form>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

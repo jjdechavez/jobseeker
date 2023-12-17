@@ -21,6 +21,9 @@ import SettingsCountryEditPage, {
   loader as settingCountryLoader,
   action as settingCountryEditAction,
 } from "./routes/settings/countries/country-edit.tsx";
+import  {
+  action as settingCountryDeleteAction,
+} from "./routes/settings/countries/country-destroy.tsx";
 
 import { getSession } from "./lib/auth.ts";
 
@@ -70,6 +73,10 @@ const router = createBrowserRouter([
             element: <SettingsCountryEditPage />,
             loader: settingCountryLoader,
             action: settingCountryEditAction,
+          },
+          {
+            path: "countries/:countryId/destroy",
+            action: settingCountryDeleteAction,
           },
         ],
       },
